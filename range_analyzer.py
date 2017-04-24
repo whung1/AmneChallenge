@@ -29,8 +29,7 @@ class RangeAnalyzer:
             # 1 for increasing, -1 for decreasing, 0 for same value
             # and the range, using trend_start to trend_end
             trend = 0
-            trend_start = i
-            trend_end = i
+            trend_count = 0
             window_sum = 0
 
             # Since the size of the current window is i to i+k, we only range from (i, i+k - 1)
@@ -38,16 +37,14 @@ class RangeAnalyzer:
             # to calculate increasing or decreasing
             for j in range(i, i+self.k-1):
                 cur_interval = self.calculate_interval(self.ranges[j], self.ranges[j+1])
-                if trend == cur_interval:  # its the same trend
-                    # continue tracking the trend
-                    trend_end = j+1
                 if trend != cur_interval:  # our trend ends here since not increasing or decreasing anymore
-                    window_sum += trend * sum(range(trend_end-trend_start+1))
                     # Set our new trend
                     trend = cur_interval
-                    trend_start = j
-                    trend_end = j+1
-            window_sum += trend * sum(range(trend_end - trend_start + 1)) # sum the remaining trend
+                    trend_count = 1
+                else:  # its the same trend
+                    # continue tracking the trend
+                    trend_count += 1
+                window_sum += trend * trend_count
             print(window_sum)
 
     @staticmethod
