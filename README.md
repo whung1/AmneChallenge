@@ -1,7 +1,7 @@
 # AmneChallenge
 Challenge at https://www.amne.co/challenge/
 
-## Description
+## Problem Description
 
 As Amne expands, we will want to understand large-scale patterns in home values.
 
@@ -44,3 +44,22 @@ For the first window of [188930, 194123, 201345], there are 3 increasing subrang
 ### Performance
 
 Your solution should run in less than 30 seconds and use less than 50MB of memory with a valid input of any size (within the given constraints).
+
+## Problem Solution Logic
+
+For a list of numbers of size n, we need to check windows of k size within the list.
+Since the each previous window gives no particularly useful insights on the next window given that continuously increaasing or decreasing subranges will change dynamically based on order.
+Thus, we should try to simplify the calculation of the total summation of a continuously increasing or decreasing subrange of size m where 2<=m<=k
+We notice that for each m, m+1 = (m-1)+sum(m-1) where sum(m) is the sum of all continuous subranges of size m
+
+Example:
+    Lets say we have a sub-window of [1, 2, 3, 4, 5] where it is continuously increasing.
+    base case: [1] = m=1, has 0 subranges, sum(1) = 0
+    [1, 2] = first subrange, base case m=2, sum(m) = 1 + 0 = m-1 + sum(m-1) = 0
+    [1, 2, 3] = m=3, notice that adding 3 means it increases by the number of interactions with each former element of the subrange
+    in this case, [1, x, 3], [2, 3] since the values in middle are irrelevant as long as it is continuous with the trend.
+    Thus after including the previous subrange [1,2], sum(m+1) = 2 + 1 = (m-1) + sum(m-1) = 3
+    [1, 2, 3, 4] = m=4, like the previous case, we get the new additions [1, x, x, 4] [2, x, 4] [3, 4] to the previous ones
+    Thus, sum(m) = 3 + 3 = 6 = (m-1) + sum(m-1)
+
+    
